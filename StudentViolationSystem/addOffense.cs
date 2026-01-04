@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Compiler;
+using StudentViolationSystem;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -20,22 +21,65 @@ namespace StudentViolationSystem
     {
         public addOffense()
         {
-            this.ActiveControl = studInfoTxt;
             InitializeComponent();
+            this.ActiveControl = studInfoTxt;
+            
+        }
 
-            studNameCb.DropDownStyle = ComboBoxStyle.DropDown; // allows typing
-            studNameCb.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            studNameCb.AutoCompleteSource = AutoCompleteSource.ListItems;
+        private void ClearFields()
+        {
+            // ComboBoxes
+            studentNameCb.SelectedIndex = -1;
+            offenseClassCb.SelectedIndex = -1;
+            offenseTitleCb.Items.Clear();
 
-            studIdTxtField.ReadOnly = true;
-            secTxtField.ReadOnly = true;
-            yearLvlTxtField.ReadOnly = true;
-            actionTakenTxtField.ReadOnly = true;
+            // TextFields
+            studentIdField.Clear();
+            sectionField.Clear();
+            yearLvlField.Clear();
+            actionTakenField.Clear();
 
-            offenseClassCombo.DropDownStyle = ComboBoxStyle.DropDownList;
-            offenseTitleCombo.DropDownStyle = ComboBoxStyle.DropDownList;
+            // Date (optional: reset to today)
+            dateTimePicker.Value = DateTime.Now;
+        }
+
+        private void DisableAutoFilledFields()
+        {
+            studentIdField.ReadOnly = true;
+            sectionField.ReadOnly = true;
+            yearLvlField.ReadOnly = true;
+            actionTakenField.ReadOnly = true;
+        }
+
+        private void LoadStudents()
+        {
+            studentNameCb.Items.Clear();
+            using (MySqlConnection con = Database.GetConnection())
+            {
+                con.Open();
+
+                string sql = @"SELECT DISTINCT name 
+                       FROM studentinfo
+                       WHERE student_id <> 1
+                       ORDER BY name ASC";
+
+                MySqlCommand cmd = new MySqlCommand(sql, con);
+                MySqlDataReader dr = cmd.ExecuteReader();
+
+                
+                while (dr.Read())
+                {
+                    studentNameCb.Items.Add(dr["name"].ToString());
+                }
+            }
+        }
 
 
+        private void LoadOffenseCategory()
+        {
+            offenseClassCb.Items.Clear();
+            offenseClassCb.Items.Add("Major");
+            offenseClassCb.Items.Add("Minor");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -82,11 +126,11 @@ namespace StudentViolationSystem
 
         private void addOffense_Load(object sender, EventArgs e)
         {
-            LoadStudentNames();
-            LoadOffenseClassification();
-
-
+            LoadStudents();
+            LoadOffenseCategory();
+            DisableAutoFilledFields();
         }
+
 
         private void logOutText_Click(object sender, EventArgs e)
         {
@@ -126,296 +170,6 @@ namespace StudentViolationSystem
             userManagementPage userMan = new userManagementPage();
             userMan.Show();
             this.Hide();
-        }
-
-
-        private void LoadStudentNames()
-        {
-            studNameCb.Items.Clear();
-
-            using (MySqlConnection conn = Database.GetConnection())
-            {
-                try
-                {
-                    conn.Open();
-                    string query = "SELECT name FROM studentinfo ORDER BY name ASC";
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    MySqlDataReader reader = cmd.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        studNameCb.Items.Add(reader["name"].ToString());
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error loading student names: " + ex.Message);
-                }
-            }
-        }
-
-        private void SaveYearLevelToDb(string selectedYear, int studentId)
-        {
-            using (MySqlConnection conn = Database.GetConnection())
-            {
-                try
-                {
-                    conn.Open();
-                    string query = "UPDATE studentinfo SET year_level = @year";
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@year", selectedYear);
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error saving year level: " + ex.Message);
-                }
-            }
-        }
-
-        private void SaveSectionToDb(string selectedSection, int studentId)
-        {
-            string connString = "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=0ms2026System;";
-
-            using (MySqlConnection conn = new MySqlConnection(connString))
-            {
-                try
-                {
-                    conn.Open();
-
-                    string query = @"UPDATE studentinfo 
-                             SET section = @section 
-                             WHERE student_id = @studentId";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@section", selectedSection);
-                        cmd.Parameters.AddWithValue("@studentId", studentId);
-
-                        int rowsAffected = cmd.ExecuteNonQuery();
-
-                        MessageBox.Show(rowsAffected > 0
-                            ? "Section saved successfully!"
-                            : "No record updated. Check student ID.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
-        }
-
-        private void saveButton_Click(object sender, EventArgs e)
-        {
-            string connString = "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=;";
-            
-            if (studNameCb.SelectedIndex == -1)
-            {
-                MessageBox.Show("Please select a student!");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(studIdTxtField.Text) ||
-                string.IsNullOrWhiteSpace(yearLvlTxtField.Text) ||
-                string.IsNullOrWhiteSpace(secTxtField.Text))
-            {
-                MessageBox.Show("Student information is incomplete!");
-                return;
-            }
-
-           
-            if (!int.TryParse(studIdTxtField.Text, out int studentId))
-            {
-                MessageBox.Show("Invalid Student ID!");
-                return;
-            }
-
-            string yearLevel = yearLvlTxtField.Text;
-            string section = secTxtField.Text;
-
-       
-            SaveYearLevelToDb(yearLevel, studentId);
-            SaveSectionToDb(section, studentId);
-
-    
-            if (offenseTitleCombo.SelectedItem != null)
-            {
-                string offenseName = offenseTitleCombo.SelectedItem.ToString();
-                DateTime violationDate = dateTimePicker.Value;
-
-                using (MySqlConnection conn = new MySqlConnection(connString))
-                {
-                    try
-                    {
-                        conn.Open();
-
-                        // Get offense_id from offense name
-                        string offenseQuery = "SELECT offense_id FROM offenses WHERE offense_name=@offenseName";
-                        MySqlCommand offenseCmd = new MySqlCommand(offenseQuery, conn);
-                        offenseCmd.Parameters.AddWithValue("@offenseName", offenseName);
-                        object offenseIdObj = offenseCmd.ExecuteScalar();
-
-                        if (offenseIdObj != null)
-                        {
-                            int offenseId = Convert.ToInt32(offenseIdObj);
-
-                            // Insert into studentinfo table
-                            string insertQuery = @"
-                        INSERT INTO violations (student_id, offense_id, date, year_level, section)
-                        VALUES (@studentId, @offenseId, @date,@yearLevel,@section )";
-                            MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn);
-                            insertCmd.Parameters.AddWithValue("@studentId", studentId);
-                            insertCmd.Parameters.AddWithValue("@offenseId", offenseId);
-                            insertCmd.Parameters.AddWithValue("@date", violationDate);
-                            insertCmd.Parameters.AddWithValue("@yearLevel", yearLevel);
-                            insertCmd.Parameters.AddWithValue("@section", section);
-
-                            insertCmd.ExecuteNonQuery();
-                            MessageBox.Show("Student record and offense saved successfully!");
-                        }
-                        else
-                        {
-                            MessageBox.Show("Offense not found in the database.");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error saving offense: " + ex.Message);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Student record updated successfully!");
-            }
-        }
-
-        private void studNameCb_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (studNameCb.SelectedItem != null)
-            {
-                string selectedName = studNameCb.SelectedItem.ToString();
-                FillStudentDetails(selectedName);
-            }
-        }
-
-        private void FillStudentDetails(string name)
-        {
-            using (MySqlConnection conn = Database.GetConnection())
-            {
-                try
-                {
-                    conn.Open();
-                    string query = "SELECT student_id, section, year_level FROM studentinfo WHERE name = @name";
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@name", name);
-
-                    MySqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read())
-                    {
-                        studIdTxtField.Text = reader["student_id"].ToString();
-                        yearLvlTxtField.Text = reader["year_level"].ToString();
-                        secTxtField.Text = reader["section"].ToString();
-                        }
-                    }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error fetching student details: " + ex.Message);
-                }
-            }
-        }
-
-        private void LoadOffenseClassification()
-        {
-            offenseClassCombo.Items.Clear();
-            offenseClassCombo.Items.Add("Major");
-            offenseClassCombo.Items.Add("Minor");
-        }
-
-        private void LoadOffenseClassification(string offenseClass)
-        {
-            offenseTitleCombo.Items.Clear();
-
-            using (MySqlConnection conn = Database.GetConnection())
-            {
-                conn.Open();
-                string query = "SELECT offense_name FROM offenses WHERE category=@category";
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@category", offenseClass);
-
-                MySqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    offenseTitleCombo.Items.Add(reader.GetString("offense_name"));
-                }
-            }
-        }
-    
-
-        private void OffenseClassificationToDb(string selectedOffenseClassification, int studentId)
-        {
-            string connString = "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=;";
-
-            using (MySqlConnection conn = new MySqlConnection(connString))
-            {
-                try
-                {
-                    conn.Open();
-
-                    string query = @"UPDATE violations 
-                             SET category = @category 
-                             WHERE student_id = @studentId";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@category", selectedOffenseClassification);
-                        cmd.Parameters.AddWithValue("@studentId", studentId);
-
-                        int rowsAffected = cmd.ExecuteNonQuery();
-
-                        MessageBox.Show(rowsAffected > 0
-                            ? "Offense Classification saved successfully!"
-                            : "No record updated. Check student ID.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
-        }
-
-        private void offenseClassCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (offenseClassCombo.SelectedItem != null)
-            {
-                string selectedClass = offenseClassCombo.SelectedItem.ToString();
-                LoadOffenseClassification(selectedClass);
-            }
-        }
-
-        private void offenseTitleCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string connString = "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=;";
-
-            if (offenseTitleCombo.SelectedItem != null)
-            {
-                string selectedOffense = offenseTitleCombo.SelectedItem.ToString();
-                using (MySqlConnection conn = new MySqlConnection (connString))
-                {
-                    conn.Open();
-                    string query = "SELECT default_action FROM offenses WHERE offense_name=@offenseName";
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@offenseName", selectedOffense);
-
-                    object result = cmd.ExecuteScalar();
-                    if (result != null)
-                    {
-                        actionTakenTxtField.Text = result.ToString(); 
-                    }
-                }
-            }
         }
 
         private void homeNav_Click_1(object sender, EventArgs e)
@@ -459,8 +213,253 @@ namespace StudentViolationSystem
         {
 
         }
+
+       
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+
+        private void panel5_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel4_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void studentNameCb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (MySqlConnection con = Database.GetConnection())
+            {
+                con.Open();
+                string sql = "SELECT * FROM studentinfo WHERE name = @name";
+                MySqlCommand cmd = new MySqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@name", studentNameCb.Text);
+
+                MySqlDataReader dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    studentIdField.Text = dr["student_id"].ToString();
+                    sectionField.Text = dr["section"].ToString();
+                    yearLvlField.Text = dr["year_level"].ToString();
+                }
+            }
+        }
+
+        private void offenseClassCb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (MySqlConnection con = Database.GetConnection())
+            {
+                con.Open();
+                string sql = "SELECT offense_name FROM offenses WHERE category = @cat";
+                MySqlCommand cmd = new MySqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@cat", offenseClassCb.Text);
+
+                MySqlDataReader dr = cmd.ExecuteReader();
+                offenseTitleCb.Items.Clear();
+
+                while (dr.Read())
+                {
+                    offenseTitleCb.Items.Add(dr["offense_name"].ToString());
+                }
+            }
+        }
+
+        private void offenseTitleCb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (MySqlConnection con = Database.GetConnection())
+            {
+                con.Open();
+                string sql = "SELECT default_action FROM offenses WHERE offense_name = @name";
+                MySqlCommand cmd = new MySqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@name", offenseTitleCb.Text);
+
+                MySqlDataReader dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    actionTakenField.Text = dr["default_action"].ToString();
+                }
+            }
+        }
+
+        private async void saveBtn_Click(object sender, EventArgs e)
+        {
+            // Basic validation
+            if (studentIdField.Text == "" || offenseTitleCb.Text == "" || actionTakenField.Text == "")
+            {
+                MessageBox.Show("Please complete all required fields.");
+                return;
+            }
+
+            saveBtn.Enabled = false;
+
+            using (MySqlConnection con = Database.GetConnection())
+            {
+                con.Open();
+
+                try
+                {
+                    string getOffenseId = "SELECT offense_id FROM offenses WHERE offense_name = @name";
+                    MySqlCommand getCmd = new MySqlCommand(getOffenseId, con);
+                    getCmd.Parameters.AddWithValue("@name", offenseTitleCb.Text);
+
+                    object result = getCmd.ExecuteScalar();
+                    if (result == null)
+                    {
+                        MessageBox.Show("Selected offense does not exist.");
+                        saveBtn.Enabled = true;
+                        return;
+                    }
+
+                    int offenseId = Convert.ToInt32(result);
+
+                    string checkDuplicate = @"SELECT COUNT(*) 
+                          FROM violations
+                          WHERE student_id = @studentId
+                          AND offense_id = @offenseId
+                          AND DATE(violation_date) = DATE(@date)";
+
+                    MySqlCommand checkCmd = new MySqlCommand(checkDuplicate, con);
+                    checkCmd.Parameters.AddWithValue("@studentId", studentIdField.Text);
+                    checkCmd.Parameters.AddWithValue("@offenseId", offenseId);
+                    checkCmd.Parameters.AddWithValue("@date", dateTimePicker.Value);
+
+                    int exists = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (exists > 0)
+                    {
+                        MessageBox.Show(
+                            "This offense has already been recorded for this student on the selected date.",
+                            "Duplicate Record",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+
+                        saveBtn.Enabled = true;
+                        return;
+                    }
+
+                    string insert = @"INSERT INTO violations
+                              (student_id, offense_id, violation_date, action_taken)
+                              VALUES (@studentId, @offenseId, @date, @action)";
+
+                    MySqlCommand cmd = new MySqlCommand(insert, con);
+                    cmd.Parameters.AddWithValue("@studentId", studentIdField.Text);
+                    cmd.Parameters.AddWithValue("@offenseId", offenseId);
+                    cmd.Parameters.AddWithValue("@date", dateTimePicker.Value);
+                    cmd.Parameters.AddWithValue("@action", actionTakenField.Text);
+
+                    cmd.ExecuteNonQuery();
+
+                    if (actionTakenField.Text.Trim()
+                        .Equals("Parent Notified", StringComparison.OrdinalIgnoreCase))
+                    {
+                        List<Guardian> guardians = GetStudentGuardians(studentIdField.Text);
+
+                        if (guardians.Count == 0)
+                        {
+                            MessageBox.Show(
+                                "Violation saved, but no guardian email was found for this student.",
+                                "Warning",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning
+                            );
+                        }
+                        else
+                        {
+                            EmailService emailService = new EmailService();
+
+                            foreach (Guardian guardian in guardians)
+                            {
+                                try
+                                {
+                                    await emailService.SendParentNotification(
+                                        guardian.Email,
+                                        guardian.Name,
+                                        studentNameCb.Text,
+                                        offenseTitleCb.Text,
+                                        actionTakenField.Text
+                                    );
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show(
+                                        $"Violation saved but failed to email {guardian.Email}\n\n{ex.Message}",
+                                        "Email Error",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Warning
+                                    );
+                                }
+                            }
+                        }
+                    }
+
+                    MessageBox.Show("Violation saved successfully.");
+                    ClearFields();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "An error occurred while saving the violation.\n\n" + ex.Message,
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+                finally
+                {
+                    saveBtn.Enabled = true;
+                }
+            }
+        }
+
+
+        private List<Guardian> GetStudentGuardians(string studentId)
+        {
+            List<Guardian> guardians = new List<Guardian>();
+
+            using (MySqlConnection con = Database.GetConnection())
+            {
+                con.Open();
+
+                string query = @"SELECT guardian_name, email
+                         FROM guardians
+                         WHERE student_id = @studentId";
+
+                MySqlCommand cmd = new MySqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@studentId", studentId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        guardians.Add(new Guardian
+                        {
+                            Name = reader["guardian_name"].ToString(),
+                            Email = reader["email"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return guardians;
+        }
+
+
+
+
     }
 }
+
 
 
 

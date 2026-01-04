@@ -202,6 +202,9 @@
       <DependentUpon>addOffense.cs</DependentUpon>
     </Compile>
     <Compile Include="Database.cs" />
+    <Compile Include="EmailConfig.cs" />
+    <Compile Include="EmailService.cs" />
+    <Compile Include="Guardian.cs" />
     <Compile Include="homePage.cs">
       <SubType>Form</SubType>
     </Compile>

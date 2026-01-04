@@ -24,6 +24,9 @@ namespace StudentViolationSystem
             UserManagmentTable();
         }
 
+        // Inside offenseRecord class
+        public string LoggedInStudentId { get; set; }
+
         private void UserManagmentTable()
         {
             using (MySqlConnection conn = Database.GetConnection())
@@ -32,13 +35,13 @@ namespace StudentViolationSystem
                 {
                     conn.Open();
 
-                    string query = @"SELECT 
-
-                       name AS 'Name',
-                       username AS 'Username',
-                       email AS 'Email'
-                       FROM studentinfo";
-
+                    string query = @"
+                        SELECT 
+                            s.name AS 'Name',
+                            a.username AS 'Username',
+                            a.email AS 'Email'
+                        FROM studentinfo s
+                        JOIN accounts a ON s.student_id = a.student_id";
 
                     MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn);
                     DataTable table = new DataTable();
@@ -57,6 +60,8 @@ namespace StudentViolationSystem
                 }
             }
         }
+
+
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -106,9 +111,41 @@ namespace StudentViolationSystem
 
         private void searchField_TextChanged(object sender, EventArgs e)
         {
+            SearchUsers(searchField.Text);
         }
 
-        private void userManagementPage_Load(object sender, EventArgs e)
+       
+    private void SearchUsers(string keyword)
+        {
+            string connectionString = "server=localhost;database=student_violation_monitoring_system_db;Uid=root;Pwd=0ms2026System;";
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string query = @"
+                SELECT
+                    s.name AS 'Name',
+                    a.username AS 'Username',
+                    a.email AS 'Email'
+                FROM studentinfo s
+                JOIN accounts a ON s.student_id = a.student_id
+                WHERE s.name LIKE @search
+                   OR a.username LIKE @search
+                   OR a.email LIKE @search";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@search", "%" + keyword + "%");
+
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    userManagementDataGrid.DataSource = dt;
+                }
+            }
+        }
+
+    private void userManagementPage_Load(object sender, EventArgs e)
         {
         }
 

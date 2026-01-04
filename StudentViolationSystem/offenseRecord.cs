@@ -13,7 +13,6 @@ namespace StudentViolationSystem
 {
     public partial class offenseRecord : Form
     {
-        //private object conn;
 
         public offenseRecord()
         {
@@ -24,9 +23,11 @@ namespace StudentViolationSystem
             this.ActiveControl = offenseRecLabel;
 
             OffenseRecordTable();
+
+
         }
 
-        private void OffenseRecordTable()
+        private void OffenseRecordTable(string search = "", DateTime? selectedDate = null)
         {
             using (MySqlConnection conn = Database.GetConnection())
             {
@@ -35,23 +36,37 @@ namespace StudentViolationSystem
                     conn.Open();
 
                     string query = @"
-                        SELECT 
-                            v.date AS 'Date',
-                            s.student_id AS 'Student ID',
-                            s.name AS 'Name',
-                            s.year_level AS 'Year Level',
-                            s.section AS 'Section',
-                            o.offense_name AS 'Offense Name',
-                            o.category AS 'Category',
-                            o.default_action AS 'Action Taken'
-                       
-                        FROM studentinfo s
-                        INNER JOIN violations v ON s.student_id = v.student_id
-                        INNER JOIN offenses o ON v.offense_id = o.offense_id";
+                SELECT 
+                    v.violation_date AS 'Date',
+                    s.student_id AS 'Student ID',
+                    s.name AS 'Name',
+                    s.year_level AS 'Year Level',
+                    s.section AS 'Section',
+                    o.offense_name AS 'Offense Name',
+                    o.category AS 'Category',
+                    o.default_action AS 'Action Taken'
+                FROM studentinfo s
+                INNER JOIN violations v ON s.student_id = v.student_id
+                INNER JOIN offenses o ON v.offense_id = o.offense_id
+                WHERE 
+                    (s.name LIKE @search OR s.student_id LIKE @search)
+            ";
 
+                    // Apply date filter only if enabled
+                    if (selectedDate.HasValue)
+                    {
+                        query += " AND DATE(v.violation_date) = @date";
+                    }
 
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@search", "%" + search + "%");
 
-                    MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn);
+                    if (selectedDate.HasValue)
+                    {
+                        cmd.Parameters.AddWithValue("@date", selectedDate.Value.Date);
+                    }
+
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                     DataTable table = new DataTable();
                     adapter.Fill(table);
 
@@ -69,6 +84,7 @@ namespace StudentViolationSystem
             }
         }
 
+
         private void textBox1_Enter(object sender, EventArgs e)
         {
             if (searchField.Text == "Search")
@@ -85,6 +101,12 @@ namespace StudentViolationSystem
                 searchField.Text = "Search";
                 searchField.ForeColor = Color.  Black;
             }
+
+            if (searchField.Text == "Search")
+                return;
+
+            OffenseRecordTable(searchField.Text.Trim());
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -118,7 +140,14 @@ namespace StudentViolationSystem
 
         private void searchField_TextChanged(object sender, EventArgs e)
         {
+            if (searchField.Text == "Search")
+                return;
 
+            DateTime? selectedDate = dateFilter.Checked
+                ? dateFilter.Value.Date
+                : (DateTime?)null;
+
+            OffenseRecordTable(searchField.Text.Trim(), selectedDate);
         }
 
         private void offenseRecord_Load(object sender, EventArgs e)
@@ -205,6 +234,19 @@ namespace StudentViolationSystem
         private void offenseRecDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void dateFilter_ValueChanged(object sender, EventArgs e)
+        {
+            DateTime? selectedDate = dateFilter.Checked
+        ? dateFilter.Value.Date
+        : (DateTime?)null;
+
+            string searchText = searchField.Text == "Search"
+                ? ""
+                : searchField.Text.Trim();
+
+            OffenseRecordTable(searchText, selectedDate);
         }
     }
 }

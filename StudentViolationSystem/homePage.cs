@@ -59,7 +59,7 @@ namespace StudentViolationSystem
 
                     string query = @"
                         SELECT 
-                            v.date AS 'Date',
+                            v.violation_date AS 'Date',
                             s.student_id AS 'Student ID',
                             s.name AS 'Name',
                             s.year_level AS 'Year Level',

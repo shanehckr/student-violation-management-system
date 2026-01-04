@@ -47,20 +47,31 @@ namespace StudentViolationSystem
 
         public void loginButton_Click(object sender, EventArgs e)
         {
-            string userInput = userField.Text.Trim(); // Username or email
+            string userInput = userField.Text.Trim(); // username only (recommended)
             string password = passField.Text.Trim();
 
-            // Hash the input password
+            if (string.IsNullOrEmpty(userInput) || string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("Please enter your username and password.");
+                return;
+            }
+
             string passwordHash = HashPassword(password);
 
-            string connString = "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=;";
+            string connString = "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=0ms2026System;";
 
             string query = @"
-                    SELECT role, email, student_id, name, section, year_level
-                    FROM studentinfo 
-                    WHERE (username = @userInput OR email = @userInput) 
-                    AND password = @passwordHash
-                    LIMIT 1";
+                SELECT 
+                    a.role,
+                    s.student_id,
+                    s.name,
+                    s.section,
+                    s.year_level
+                FROM accounts a
+                INNER JOIN studentinfo s ON a.student_id = s.student_id
+                WHERE a.username = @userInput
+                  AND a.password_hash = @passwordHash
+                LIMIT 1";
 
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
@@ -77,7 +88,6 @@ namespace StudentViolationSystem
                             if (reader.Read())
                             {
                                 string role = reader["role"].ToString();
-                                string email = reader["email"].ToString(); 
 
                                 if (role == "admin")
                                 {
@@ -89,8 +99,9 @@ namespace StudentViolationSystem
                                 {
                                     userSession.studentId = reader["student_id"].ToString();
                                     userSession.fullName = reader["name"].ToString();
-                                    userSession.grade = reader["year_level"].ToString();
                                     userSession.section = reader["section"].ToString();
+                                    userSession.grade = reader["year_level"].ToString();
+
                                     studentView form = new studentView();
                                     form.Show();
                                     this.Hide();
@@ -102,7 +113,7 @@ namespace StudentViolationSystem
                             }
                             else
                             {
-                                MessageBox.Show("Invalid username/email or password.");
+                                MessageBox.Show("Invalid username or password.");
                             }
                         }
                     }
@@ -111,9 +122,9 @@ namespace StudentViolationSystem
                 {
                     MessageBox.Show("Error connecting to database: " + ex.Message);
                 }
-
             }
         }
+
         public static class userSession
         {
             public static string studentId {get; set;}
@@ -123,8 +134,10 @@ namespace StudentViolationSystem
         }
         private void registerLabel_Click(object sender, EventArgs e)
         {
-            RegisterPage newForm = new RegisterPage();
-            newForm.Show();
+            RegisterPage registerForm = new RegisterPage();
+            registerForm.Show();
+            loginPage logInForm = new loginPage();
+            this.Hide();
         }
 
         private void userField_Enter(object sender, EventArgs e)

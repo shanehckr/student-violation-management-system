@@ -28,13 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.offenseRecLabel = new System.Windows.Forms.Label();
             this.searchField = new System.Windows.Forms.TextBox();
             this.offenseRecDataGridView = new System.Windows.Forms.DataGridView();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.logOutNav = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -46,6 +42,7 @@
             this.offenseRecIcon = new System.Windows.Forms.PictureBox();
             this.homeIcon = new System.Windows.Forms.PictureBox();
             this.userManagementIcon = new System.Windows.Forms.PictureBox();
+            this.dateFilter = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.offenseRecDataGridView)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -61,7 +58,7 @@
             this.offenseRecLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.offenseRecLabel.Location = new System.Drawing.Point(212, 22);
             this.offenseRecLabel.Name = "offenseRecLabel";
-            this.offenseRecLabel.Size = new System.Drawing.Size(156, 24);
+            this.offenseRecLabel.Size = new System.Drawing.Size(196, 29);
             this.offenseRecLabel.TabIndex = 2;
             this.offenseRecLabel.Text = "Offense Record";
             // 
@@ -72,7 +69,7 @@
             this.searchField.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.searchField.Location = new System.Drawing.Point(216, 64);
             this.searchField.Name = "searchField";
-            this.searchField.Size = new System.Drawing.Size(468, 26);
+            this.searchField.Size = new System.Drawing.Size(468, 30);
             this.searchField.TabIndex = 3;
             this.searchField.TextChanged += new System.EventHandler(this.searchField_TextChanged);
             this.searchField.Enter += new System.EventHandler(this.textBox1_Enter);
@@ -85,23 +82,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.offenseRecDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.offenseRecDataGridView.BackgroundColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.offenseRecDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.offenseRecDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.offenseRecDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
             this.offenseRecDataGridView.Location = new System.Drawing.Point(215, 191);
             this.offenseRecDataGridView.Name = "offenseRecDataGridView";
             this.offenseRecDataGridView.RowHeadersWidth = 51;
@@ -109,23 +90,6 @@
             this.offenseRecDataGridView.Size = new System.Drawing.Size(860, 368);
             this.offenseRecDataGridView.TabIndex = 5;
             this.offenseRecDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.offenseRecDataGridView_CellContentClick);
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.panel2.Location = new System.Drawing.Point(217, 105);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(541, 35);
-            this.panel2.TabIndex = 6;
-            // 
-            // panel3
-            // 
-            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel3.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.panel3.Location = new System.Drawing.Point(845, 105);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(240, 35);
-            this.panel3.TabIndex = 7;
             // 
             // panel1
             // 
@@ -152,7 +116,7 @@
             this.logOutNav.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.logOutNav.Location = new System.Drawing.Point(62, 604);
             this.logOutNav.Name = "logOutNav";
-            this.logOutNav.Size = new System.Drawing.Size(66, 20);
+            this.logOutNav.Size = new System.Drawing.Size(82, 25);
             this.logOutNav.TabIndex = 15;
             this.logOutNav.Text = "Log Out";
             this.logOutNav.Click += new System.EventHandler(this.logOutNav_Click);
@@ -175,7 +139,7 @@
             this.userManagementNav.Location = new System.Drawing.Point(46, 359);
             this.userManagementNav.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.userManagementNav.Name = "userManagementNav";
-            this.userManagementNav.Size = new System.Drawing.Size(141, 20);
+            this.userManagementNav.Size = new System.Drawing.Size(173, 25);
             this.userManagementNav.TabIndex = 12;
             this.userManagementNav.Text = "User Management";
             this.userManagementNav.Click += new System.EventHandler(this.userManagementNav_Click_1);
@@ -188,7 +152,7 @@
             this.addOffenseNav.Location = new System.Drawing.Point(47, 306);
             this.addOffenseNav.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.addOffenseNav.Name = "addOffenseNav";
-            this.addOffenseNav.Size = new System.Drawing.Size(99, 20);
+            this.addOffenseNav.Size = new System.Drawing.Size(122, 25);
             this.addOffenseNav.TabIndex = 11;
             this.addOffenseNav.Text = "Add Offense";
             this.addOffenseNav.Click += new System.EventHandler(this.addOffenseNav_Click_1);
@@ -201,7 +165,7 @@
             this.offenseRecNav.Location = new System.Drawing.Point(46, 255);
             this.offenseRecNav.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.offenseRecNav.Name = "offenseRecNav";
-            this.offenseRecNav.Size = new System.Drawing.Size(136, 20);
+            this.offenseRecNav.Size = new System.Drawing.Size(162, 25);
             this.offenseRecNav.TabIndex = 10;
             this.offenseRecNav.Text = "Offense Record";
             // 
@@ -213,7 +177,7 @@
             this.homeNav.Location = new System.Drawing.Point(48, 204);
             this.homeNav.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.homeNav.Name = "homeNav";
-            this.homeNav.Size = new System.Drawing.Size(52, 20);
+            this.homeNav.Size = new System.Drawing.Size(64, 25);
             this.homeNav.TabIndex = 5;
             this.homeNav.Text = "Home";
             this.homeNav.Click += new System.EventHandler(this.homeNav_Click_1);
@@ -263,20 +227,28 @@
             this.userManagementIcon.TabIndex = 9;
             this.userManagementIcon.TabStop = false;
             // 
+            // dateFilter
+            // 
+            this.dateFilter.Location = new System.Drawing.Point(848, 64);
+            this.dateFilter.Name = "dateFilter";
+            this.dateFilter.Size = new System.Drawing.Size(200, 23);
+            this.dateFilter.TabIndex = 12;
+            this.dateFilter.ValueChanged += new System.EventHandler(this.dateFilter_ValueChanged);
+            // 
             // offenseRecord
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1114, 660);
+            this.Controls.Add(this.dateFilter);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.panel2);
             this.Controls.Add(this.offenseRecDataGridView);
             this.Controls.Add(this.searchField);
             this.Controls.Add(this.offenseRecLabel);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "offenseRecord";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Offense Record";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.offenseRecord_Load);
             ((System.ComponentModel.ISupportInitialize)(this.offenseRecDataGridView)).EndInit();
@@ -296,8 +268,6 @@
         private System.Windows.Forms.Label offenseRecLabel;
         private System.Windows.Forms.TextBox searchField;
         private System.Windows.Forms.DataGridView offenseRecDataGridView;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label userManagementNav;
         private System.Windows.Forms.Label addOffenseNav;
@@ -309,5 +279,6 @@
         private System.Windows.Forms.PictureBox userManagementIcon;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label logOutNav;
+        private System.Windows.Forms.DateTimePicker dateFilter;
     }
 }

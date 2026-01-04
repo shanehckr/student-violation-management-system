@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using System.Text.RegularExpressions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +13,8 @@ using System.Windows.Forms;
 
 namespace StudentViolationSystem
 {
+
+
     public partial class RegisterPage : Form
     {
         public RegisterPage()
@@ -58,11 +61,10 @@ namespace StudentViolationSystem
             }
         }
 
-
-
-
         private void RegisterPage_Load(object sender, EventArgs e)
         {
+            passField.Text = "";
+            confirmPassField.Text = "";
 
         }
 
@@ -179,28 +181,45 @@ namespace StudentViolationSystem
 
         }
 
+
         private void registerButton_Click(object sender, EventArgs e)
         {
-            // Get input values
+           
             string surname = surnameField.Text.Trim();
             string firstName = fNameField.Text.Trim();
             string middleInitial = initialField.Text.Trim();
             string username = userField.Text.Trim();
             string studentId = studentIdField.Text.Trim();
             string email = emailField.Text.Trim();
-            string password = passField.Text.Trim();
-            string confirmPassword = confirmPassField.Text.Trim();
+            string password = passField.Text;
+            string confirmPassword = confirmPassField.Text;
 
-            // Validate inputs
-            if (string.IsNullOrEmpty(surname) ||
-                string.IsNullOrEmpty(firstName) ||
-                string.IsNullOrEmpty(username) ||
-                string.IsNullOrEmpty(studentId) ||
-                string.IsNullOrEmpty(email) ||
-                string.IsNullOrEmpty(password) ||
-                string.IsNullOrEmpty(confirmPassword))
+            bool hasEmptyField =
+                string.IsNullOrWhiteSpace(surname) || surname == "Surname" ||
+                string.IsNullOrWhiteSpace(firstName) || firstName == "First Name" ||
+                string.IsNullOrWhiteSpace(username) || username == "Username" ||
+                string.IsNullOrWhiteSpace(studentId) || studentId == "Student ID" ||
+                string.IsNullOrWhiteSpace(email) || email == "Email" ||
+                string.IsNullOrWhiteSpace(password) ||
+                string.IsNullOrWhiteSpace(confirmPassword);
+
+            if (hasEmptyField)
             {
-                MessageBox.Show("Please fill in all required fields.");
+                MessageBox.Show("Please fill up all the fields.");
+                return;
+            }
+
+       
+            if (studentId.Length != 9)
+            {
+                MessageBox.Show("Student ID must be exactly 9 digits.");
+                return;
+            }
+
+         
+            if (password.Length < 8)
+            {
+                MessageBox.Show("Password must be at least 8 characters long.");
                 return;
             }
 
@@ -210,40 +229,80 @@ namespace StudentViolationSystem
                 return;
             }
 
-            string fullName = string.IsNullOrEmpty(middleInitial)
-                ? $"{surname}, {firstName}"
-                : $"{surname}, {firstName} {middleInitial.ToUpper()}.";
+           
+            string fullName =
+                string.IsNullOrWhiteSpace(middleInitial) || middleInitial == "M.I."
+                    ? $"{surname}, {firstName}"
+                    : $"{surname}, {firstName} {middleInitial.ToUpper()}.";
 
-            string hashedPassword = HashPassword(password);
-
-          
-            string role = "student";
-
-            string connString = "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=;";
+            fullName = fullName.ToUpper();
 
             
-            string query = @"
-                INSERT INTO studentinfo (student_id, NAME, username, email, password, role)
-                VALUES (@student_id, @name, @username, @email, @password, @role)";
+            string connString =
+                "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=0ms2026System";
 
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 try
                 {
                     conn.Open();
-                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+
+                    string checkStudentQuery = @"
+                SELECT 1
+                FROM studentinfo
+                WHERE student_id = @student_id
+                  AND UPPER(name) = @name";
+
+                    using (MySqlCommand cmd = new MySqlCommand(checkStudentQuery, conn))
                     {
                         cmd.Parameters.AddWithValue("@student_id", studentId);
                         cmd.Parameters.AddWithValue("@name", fullName);
+
+                        if (cmd.ExecuteScalar() == null)
+                        {
+                            MessageBox.Show(
+                                "Your Student ID and Name do not match our records. Please contact the administrator."
+                            );
+                            return;
+                        }
+                    }
+
+                 
+                    string checkAccountQuery = @"
+                SELECT 1
+                FROM accounts
+                WHERE student_id = @student_id";
+
+                    using (MySqlCommand cmd = new MySqlCommand(checkAccountQuery, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@student_id", studentId);
+
+                        if (cmd.ExecuteScalar() != null)
+                        {
+                            MessageBox.Show("An account for this student already exists.");
+                            return;
+                        }
+                    }
+
+                    string insertAccountQuery = @"
+                INSERT INTO accounts
+                (student_id, username, email, password_hash, role)
+                VALUES
+                (@student_id, @username, @email, @password_hash, @role)";
+
+                    using (MySqlCommand cmd = new MySqlCommand(insertAccountQuery, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@student_id", studentId);
                         cmd.Parameters.AddWithValue("@username", username);
                         cmd.Parameters.AddWithValue("@email", email);
-                        cmd.Parameters.AddWithValue("@password", hashedPassword);
-                        cmd.Parameters.AddWithValue("@role", role);
+                        cmd.Parameters.AddWithValue("@password_hash", HashPassword(password));
+                        cmd.Parameters.AddWithValue("@role", "student");
 
                         cmd.ExecuteNonQuery();
-                        MessageBox.Show("Account created successfully!");
-                        this.Close();
                     }
+
+                    MessageBox.Show("Account created successfully!");
+                    this.Close();
                 }
                 catch (Exception ex)
                 {
@@ -251,6 +310,8 @@ namespace StudentViolationSystem
                 }
             }
         }
+
+
 
         private void studentIdField_Enter(object sender, EventArgs e)
         {
@@ -286,6 +347,68 @@ namespace StudentViolationSystem
                 emailField.Text = "Email";
                 emailField.ForeColor = Color.LightGray;
             }
+        }
+
+        private void studentIdField_KeyPress(object sender, KeyPressEventArgs e)
+        {
+          
+            if (char.IsControl(e.KeyChar))
+                return;
+
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void studentIdField_TextChanged(object sender, EventArgs e)
+        {
+            if (studentIdField.Text == "Student ID") return;
+
+            if (studentIdField.Text.Length > 9)
+            {
+                MessageBox.Show("Student ID must contain exactly 9 digits.");
+
+                studentIdField.Text = studentIdField.Text.Substring(0, 9);
+                studentIdField.SelectionStart = studentIdField.Text.Length;
+            }
+        }
+
+
+
+        private void initialField_KeyPress(object sender, KeyPressEventArgs e)
+        {
+      
+            if (char.IsControl(e.KeyChar))
+                return;
+
+
+            if (!char.IsLetter(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void initialField_TextChanged(object sender, EventArgs e)
+        {
+            if (initialField.Text == "Middle Initial") return;
+
+            if (initialField.Text.Length > 1)
+            {
+                MessageBox.Show("Middle Initial must contain only one letter.");
+                initialField.Text = initialField.Text.Substring(0, 1);
+                initialField.SelectionStart = initialField.Text.Length;
+            }
+
+            initialField.Text = initialField.Text.ToUpper();
+            initialField.SelectionStart = initialField.Text.Length;
+        }
+
+        private void logInLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            loginPage login = new loginPage();
+            login.Show();
+            this.Close(); 
         }
     }
 }

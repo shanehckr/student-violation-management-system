@@ -21,7 +21,6 @@ namespace StudentViolationSystem
         }
 
 
-
         private void StudentViewData()
         {
             using (MySqlConnection conn = Database.GetConnection())
@@ -30,17 +29,19 @@ namespace StudentViolationSystem
                 {
                     conn.Open();
                     string query = @"
-                    SELECT
-                        v.date AS 'Date',
-                        o.offense_name AS 'Offense',
-                        o.category AS 'Category',
-                        o.default_action AS 'Action Taken'
-
-                   FROM StudentInfo s
-                   INNER JOIN violations v ON s.student_id = v.student_id
-                   INNER JOIN offenses o ON v.offense_id = o.offense_id";
+                        SELECT
+                            v.violation_date AS 'Date',
+                            o.offense_name AS 'Offense',
+                            o.category AS 'Category',
+                            o.default_action AS 'Action Taken'
+                        FROM StudentInfo s
+                        INNER JOIN violations v ON s.student_id = v.student_id
+                        INNER JOIN offenses o ON v.offense_id = o.offense_id
+                        WHERE s.student_id = @student_id";  // <-- filter for logged-in student
 
                     MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn);
+                    adapter.SelectCommand.Parameters.AddWithValue("@student_id", userSession.studentId);
+
                     DataTable table = new DataTable();
                     adapter.Fill(table);
 
@@ -49,7 +50,7 @@ namespace StudentViolationSystem
                 catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Failed to load student records.\n\n" + ex.Message,
+                        "Failed to load your offenses.\n\n" + ex.Message,
                         "Database Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
@@ -57,6 +58,7 @@ namespace StudentViolationSystem
                 }
             }
         }
+
 
         private void label1_Click(object sender, EventArgs e)
         {
