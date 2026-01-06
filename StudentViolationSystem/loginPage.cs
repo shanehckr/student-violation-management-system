@@ -58,7 +58,7 @@ namespace StudentViolationSystem
 
             string passwordHash = HashPassword(password);
 
-            string connString = "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=0ms2026System;";
+            string connString = "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=;";
 
             string query = @"
                 SELECT 

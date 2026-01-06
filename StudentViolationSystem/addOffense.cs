@@ -22,7 +22,7 @@ namespace StudentViolationSystem
         public addOffense()
         {
             InitializeComponent();
-            this.ActiveControl = studInfoTxt;
+            this.ActiveControl = studInfoPanel;
             
         }
 
@@ -454,9 +454,47 @@ namespace StudentViolationSystem
             return guardians;
         }
 
+        private void addOffenseLbl_Click(object sender, EventArgs e)
+        {
 
+        }
 
+        private void contentHolder_Paint(object sender, PaintEventArgs e)
+        {
 
+        }
+
+        private void homeNav_Click_2(object sender, EventArgs e)
+        {
+            homePage home = new homePage();
+            home.Show();
+            this.Hide();
+        }
+
+        private void offenseRecNav_Click_2(object sender, EventArgs e)
+        {
+            offenseRecord rec = new offenseRecord();
+            rec.Show();
+            this.Hide();
+        }
+
+        private void userManagementNav_Click_2(object sender, EventArgs e)
+        {
+            userManagementPage user = new userManagementPage();
+            user.Show();
+            this.Hide();
+        }
+
+        private void logOutNav_Click_1(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Are you sure you want to log out?", "Confirm", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+                loginPage form = new loginPage();
+                form.Show();
+                this.Hide();
+            }
+        }
     }
 }
 

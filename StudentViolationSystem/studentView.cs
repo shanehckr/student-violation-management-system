@@ -34,7 +34,7 @@ namespace StudentViolationSystem
                             o.offense_name AS 'Offense',
                             o.category AS 'Category',
                             o.default_action AS 'Action Taken'
-                        FROM StudentInfo s
+                        FROM studentinfo s
                         INNER JOIN violations v ON s.student_id = v.student_id
                         INNER JOIN offenses o ON v.offense_id = o.offense_id
                         WHERE s.student_id = @student_id";  // <-- filter for logged-in student
@@ -88,6 +88,22 @@ namespace StudentViolationSystem
         private void studentDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void logOutNav_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Are you sure you want to log out?", "Confirm", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+                loginPage form = new loginPage();
+                form.Show();
+                this.Hide();
+            }
+        }
+
+        private void studentView_Shown(object sender, EventArgs e)
+        {
+            studentDataGridView.ClearSelection();
         }
     } 
 }

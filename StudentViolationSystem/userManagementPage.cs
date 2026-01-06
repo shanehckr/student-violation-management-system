@@ -117,7 +117,7 @@ namespace StudentViolationSystem
        
     private void SearchUsers(string keyword)
         {
-            string connectionString = "server=localhost;database=student_violation_monitoring_system_db;Uid=root;Pwd=0ms2026System;";
+            string connectionString = "server=localhost;database=student_violation_monitoring_system_db;Uid=root;Pwd=;";
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -147,6 +147,7 @@ namespace StudentViolationSystem
 
     private void userManagementPage_Load(object sender, EventArgs e)
         {
+            userManagementDataGrid.ClearSelection();
         }
 
         private void logOutText_Click(object sender, EventArgs e)
@@ -218,6 +219,16 @@ namespace StudentViolationSystem
                 form.Show();
                 this.Hide();
             }
+        }
+
+        private void userManagementDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void userManagementNav_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

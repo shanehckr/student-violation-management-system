@@ -99,7 +99,7 @@ namespace StudentViolationSystem
             if (searchField.Text == "")
             {
                 searchField.Text = "Search";
-                searchField.ForeColor = Color.  Black;
+                searchField.ForeColor = Color.Black;
             }
 
             if (searchField.Text == "Search")
@@ -143,13 +143,21 @@ namespace StudentViolationSystem
             if (searchField.Text == "Search")
                 return;
 
-            DateTime? selectedDate = dateFilter.Checked
-                ? dateFilter.Value.Date
-                : (DateTime?)null;
+            DataView dv = offenseRecDataGridView.DataSource as DataView;
 
-            OffenseRecordTable(searchField.Text.Trim(), selectedDate);
+            if (dv == null)
+            {
+                DataTable dt = offenseRecDataGridView.DataSource as DataTable;
+                if (dt != null)
+                {
+                    dv = dt.DefaultView;
+                }
+            } if (dv != null)
+            {
+                dv.RowFilter = string.Format("[Name] LIKE '%{0}%'", searchField.Text);
+                offenseRecDataGridView.DataSource = dv;
+            }
         }
-
         private void offenseRecord_Load(object sender, EventArgs e)
         {
 
@@ -226,11 +234,6 @@ namespace StudentViolationSystem
             }
         }
 
-        private void addOffenseIcon_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void offenseRecDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -248,5 +251,44 @@ namespace StudentViolationSystem
 
             OffenseRecordTable(searchText, selectedDate);
         }
+
+        private void homeNav_Click_2(object sender, EventArgs e)
+        {
+            homePage home = new homePage();
+            home.Show();
+            this.Hide();
+        }
+
+        private void addOffenseNav_Click_2(object sender, EventArgs e)
+        {
+            addOffense add = new addOffense();
+            add.Show();
+            this.Hide();
+        }
+
+        private void userManagementNav_Click_2(object sender, EventArgs e)
+        {
+            userManagementPage user = new userManagementPage();
+            user.Show();
+            this.Hide();
+        }
+
+        private void logOutNav_Click_1(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Are you sure you want to log out?", "Confirm", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+                loginPage form = new loginPage();
+                form.Show();
+                this.Hide();
+            }
+        }
+
+        private void offenseRecord_Shown(object sender, EventArgs e)
+        {
+            offenseRecDataGridView.ClearSelection();
+        }
+        
     }
 }
+

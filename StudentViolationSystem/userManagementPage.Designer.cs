@@ -28,6 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.userManagementLbl = new System.Windows.Forms.Label();
             this.searchField = new System.Windows.Forms.TextBox();
             this.userManagementDataGrid = new System.Windows.Forms.DataGridView();
@@ -54,23 +58,22 @@
             // userManagementLbl
             // 
             this.userManagementLbl.AutoSize = true;
-            this.userManagementLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userManagementLbl.Location = new System.Drawing.Point(287, 30);
-            this.userManagementLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.userManagementLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userManagementLbl.Location = new System.Drawing.Point(232, 24);
             this.userManagementLbl.Name = "userManagementLbl";
-            this.userManagementLbl.Size = new System.Drawing.Size(225, 29);
+            this.userManagementLbl.Size = new System.Drawing.Size(203, 25);
             this.userManagementLbl.TabIndex = 7;
             this.userManagementLbl.Text = "User Management";
             // 
             // searchField
             // 
-            this.searchField.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.searchField.BackColor = System.Drawing.SystemColors.HighlightText;
             this.searchField.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.searchField.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.searchField.Location = new System.Drawing.Point(293, 65);
-            this.searchField.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.searchField.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.searchField.Location = new System.Drawing.Point(232, 68);
+            this.searchField.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.searchField.Name = "searchField";
-            this.searchField.Size = new System.Drawing.Size(727, 30);
+            this.searchField.Size = new System.Drawing.Size(546, 29);
             this.searchField.TabIndex = 4;
             this.searchField.TextChanged += new System.EventHandler(this.searchField_TextChanged);
             this.searchField.Enter += new System.EventHandler(this.searchField_Enter);
@@ -78,22 +81,57 @@
             // 
             // userManagementDataGrid
             // 
+            this.userManagementDataGrid.AllowUserToAddRows = false;
             this.userManagementDataGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.userManagementDataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.userManagementDataGrid.BackgroundColor = System.Drawing.SystemColors.ControlLight;
-            this.userManagementDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.userManagementDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.userManagementDataGrid.BackgroundColor = System.Drawing.SystemColors.HighlightText;
+            this.userManagementDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.Desktop;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.userManagementDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            this.userManagementDataGrid.ColumnHeadersHeight = 27;
+            this.userManagementDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.Desktop;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.userManagementDataGrid.DefaultCellStyle = dataGridViewCellStyle6;
+            this.userManagementDataGrid.EnableHeadersVisualStyles = false;
             this.userManagementDataGrid.GridColor = System.Drawing.SystemColors.ButtonShadow;
-            this.userManagementDataGrid.Location = new System.Drawing.Point(301, 234);
-            this.userManagementDataGrid.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.userManagementDataGrid.Location = new System.Drawing.Point(231, 142);
+            this.userManagementDataGrid.Margin = new System.Windows.Forms.Padding(2);
             this.userManagementDataGrid.Name = "userManagementDataGrid";
+            this.userManagementDataGrid.ReadOnly = true;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.Desktop;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.userManagementDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.userManagementDataGrid.RowHeadersVisible = false;
             this.userManagementDataGrid.RowHeadersWidth = 51;
+            this.userManagementDataGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.Desktop;
+            this.userManagementDataGrid.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.userManagementDataGrid.RowTemplate.Height = 24;
-            this.userManagementDataGrid.Size = new System.Drawing.Size(1147, 453);
+            this.userManagementDataGrid.Size = new System.Drawing.Size(840, 526);
             this.userManagementDataGrid.TabIndex = 8;
+            this.userManagementDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.userManagementDataGrid_CellContentClick);
             // 
             // panel1
             // 
@@ -110,19 +148,17 @@
             this.panel1.Controls.Add(this.userManagementIcon);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(267, 812);
+            this.panel1.Size = new System.Drawing.Size(221, 689);
             this.panel1.TabIndex = 11;
             // 
             // logOutNav
             // 
             this.logOutNav.AutoSize = true;
             this.logOutNav.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.logOutNav.Location = new System.Drawing.Point(83, 743);
-            this.logOutNav.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.logOutNav.Location = new System.Drawing.Point(68, 614);
             this.logOutNav.Name = "logOutNav";
-            this.logOutNav.Size = new System.Drawing.Size(82, 25);
+            this.logOutNav.Size = new System.Drawing.Size(66, 20);
             this.logOutNav.TabIndex = 16;
             this.logOutNav.Text = "Log Out";
             this.logOutNav.Click += new System.EventHandler(this.logOutNav_Click);
@@ -130,10 +166,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::StudentViolationSystem.Properties.Resources.school_logo;
-            this.pictureBox1.Location = new System.Drawing.Point(-33, 23);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Location = new System.Drawing.Point(-56, 1);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(300, 190);
+            this.pictureBox1.Size = new System.Drawing.Size(300, 230);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
@@ -143,22 +178,25 @@
             this.userManagementNav.AutoSize = true;
             this.userManagementNav.Cursor = System.Windows.Forms.Cursors.Hand;
             this.userManagementNav.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userManagementNav.Location = new System.Drawing.Point(60, 444);
+            this.userManagementNav.Location = new System.Drawing.Point(57, 414);
+            this.userManagementNav.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.userManagementNav.Name = "userManagementNav";
-            this.userManagementNav.Size = new System.Drawing.Size(188, 25);
+            this.userManagementNav.Size = new System.Drawing.Size(156, 20);
             this.userManagementNav.TabIndex = 12;
             this.userManagementNav.Text = "User Management";
+            this.userManagementNav.Click += new System.EventHandler(this.userManagementNav_Click_1);
             // 
             // addOffenseNav
             // 
             this.addOffenseNav.AutoSize = true;
             this.addOffenseNav.Cursor = System.Windows.Forms.Cursors.Hand;
             this.addOffenseNav.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addOffenseNav.Location = new System.Drawing.Point(63, 377);
+            this.addOffenseNav.Location = new System.Drawing.Point(57, 358);
+            this.addOffenseNav.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.addOffenseNav.Name = "addOffenseNav";
-            this.addOffenseNav.Size = new System.Drawing.Size(122, 25);
+            this.addOffenseNav.Size = new System.Drawing.Size(103, 20);
             this.addOffenseNav.TabIndex = 11;
-            this.addOffenseNav.Text = "Add Offense";
+            this.addOffenseNav.Text = "Add Violation";
             this.addOffenseNav.Click += new System.EventHandler(this.addOffenseNav_Click_1);
             // 
             // offenseRecNav
@@ -166,11 +204,12 @@
             this.offenseRecNav.AutoSize = true;
             this.offenseRecNav.Cursor = System.Windows.Forms.Cursors.Hand;
             this.offenseRecNav.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.offenseRecNav.Location = new System.Drawing.Point(63, 314);
+            this.offenseRecNav.Location = new System.Drawing.Point(56, 304);
+            this.offenseRecNav.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.offenseRecNav.Name = "offenseRecNav";
-            this.offenseRecNav.Size = new System.Drawing.Size(148, 25);
+            this.offenseRecNav.Size = new System.Drawing.Size(126, 20);
             this.offenseRecNav.TabIndex = 10;
-            this.offenseRecNav.Text = "Offense Record";
+            this.offenseRecNav.Text = "Violation Record";
             this.offenseRecNav.Click += new System.EventHandler(this.offenseRecNav_Click_1);
             // 
             // homeNav
@@ -178,9 +217,10 @@
             this.homeNav.AutoSize = true;
             this.homeNav.Cursor = System.Windows.Forms.Cursors.Hand;
             this.homeNav.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.homeNav.Location = new System.Drawing.Point(69, 249);
+            this.homeNav.Location = new System.Drawing.Point(58, 246);
+            this.homeNav.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.homeNav.Name = "homeNav";
-            this.homeNav.Size = new System.Drawing.Size(64, 25);
+            this.homeNav.Size = new System.Drawing.Size(52, 20);
             this.homeNav.TabIndex = 5;
             this.homeNav.Text = "Home";
             this.homeNav.Click += new System.EventHandler(this.homeNav_Click_1);
@@ -189,10 +229,9 @@
             // 
             this.addOffenseIcon.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.addOffenseIcon.Image = global::StudentViolationSystem.Properties.Resources.add_offense_icon__1_;
-            this.addOffenseIcon.Location = new System.Drawing.Point(8, 367);
-            this.addOffenseIcon.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.addOffenseIcon.Location = new System.Drawing.Point(8, 349);
             this.addOffenseIcon.Name = "addOffenseIcon";
-            this.addOffenseIcon.Size = new System.Drawing.Size(47, 43);
+            this.addOffenseIcon.Size = new System.Drawing.Size(42, 42);
             this.addOffenseIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.addOffenseIcon.TabIndex = 8;
             this.addOffenseIcon.TabStop = false;
@@ -201,10 +240,9 @@
             // 
             this.offenseRecIcon.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.offenseRecIcon.Image = global::StudentViolationSystem.Properties.Resources.offense_record_icon;
-            this.offenseRecIcon.Location = new System.Drawing.Point(8, 304);
-            this.offenseRecIcon.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.offenseRecIcon.Location = new System.Drawing.Point(8, 294);
             this.offenseRecIcon.Name = "offenseRecIcon";
-            this.offenseRecIcon.Size = new System.Drawing.Size(47, 43);
+            this.offenseRecIcon.Size = new System.Drawing.Size(42, 42);
             this.offenseRecIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.offenseRecIcon.TabIndex = 7;
             this.offenseRecIcon.TabStop = false;
@@ -213,10 +251,9 @@
             // 
             this.homeIcon.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.homeIcon.Image = global::StudentViolationSystem.Properties.Resources.home_icon__1_;
-            this.homeIcon.Location = new System.Drawing.Point(8, 239);
-            this.homeIcon.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.homeIcon.Location = new System.Drawing.Point(8, 237);
             this.homeIcon.Name = "homeIcon";
-            this.homeIcon.Size = new System.Drawing.Size(47, 43);
+            this.homeIcon.Size = new System.Drawing.Size(42, 42);
             this.homeIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.homeIcon.TabIndex = 5;
             this.homeIcon.TabStop = false;
@@ -225,24 +262,23 @@
             // 
             this.userManagementIcon.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.userManagementIcon.Image = global::StudentViolationSystem.Properties.Resources.user_management_icon;
-            this.userManagementIcon.Location = new System.Drawing.Point(8, 431);
-            this.userManagementIcon.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.userManagementIcon.Location = new System.Drawing.Point(8, 404);
             this.userManagementIcon.Name = "userManagementIcon";
-            this.userManagementIcon.Size = new System.Drawing.Size(47, 43);
+            this.userManagementIcon.Size = new System.Drawing.Size(42, 42);
             this.userManagementIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.userManagementIcon.TabIndex = 9;
             this.userManagementIcon.TabStop = false;
             // 
             // userManagementPage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1485, 812);
+            this.BackColor = System.Drawing.SystemColors.Menu;
+            this.ClientSize = new System.Drawing.Size(1094, 689);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.userManagementDataGrid);
             this.Controls.Add(this.searchField);
             this.Controls.Add(this.userManagementLbl);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "userManagementPage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "User Management";

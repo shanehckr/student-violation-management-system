@@ -239,7 +239,7 @@ namespace StudentViolationSystem
 
             
             string connString =
-                "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=0ms2026System";
+                "Server=localhost;Database=student_violation_monitoring_system_db;Uid=root;Pwd=";
 
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
@@ -248,26 +248,34 @@ namespace StudentViolationSystem
                     conn.Open();
 
                     string checkStudentQuery = @"
-                SELECT 1
-                FROM studentinfo
-                WHERE student_id = @student_id
-                  AND UPPER(name) = @name";
+                        SELECT COUNT(*)
+                        FROM studentinfo
+                        WHERE student_id = @student_id;
+                    ";
 
                     using (MySqlCommand cmd = new MySqlCommand(checkStudentQuery, conn))
                     {
-                        cmd.Parameters.AddWithValue("@student_id", studentId);
-                        cmd.Parameters.AddWithValue("@name", fullName);
+                        long studentIdValue;
 
-                        if (cmd.ExecuteScalar() == null)
+                        if (!long.TryParse(studentId.Trim(), out studentIdValue))
                         {
-                            MessageBox.Show(
-                                "Your Student ID and Name do not match our records. Please contact the administrator."
-                            );
+                            MessageBox.Show("Invalid Student ID format.");
+                            return;
+                        }
+
+                        cmd.Parameters.Add("@student_id", MySqlDbType.Int64).Value = studentIdValue;
+
+                        int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                        if (count == 0)
+                        {
+                            MessageBox.Show("Student ID does not exist in our records.");
                             return;
                         }
                     }
 
-                 
+
+
                     string checkAccountQuery = @"
                 SELECT 1
                 FROM accounts

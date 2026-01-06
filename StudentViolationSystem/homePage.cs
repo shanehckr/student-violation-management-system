@@ -17,6 +17,8 @@ namespace StudentViolationSystem
         {
             InitializeComponent();
             HomePageData();
+            this.ActiveControl = homeLbl;
+
         }
 
         private void LoadDashboardCounts()
@@ -144,7 +146,54 @@ namespace StudentViolationSystem
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+           
+        }
 
+        private void offenseRecNav_Click_1(object sender, EventArgs e)
+        {
+            offenseRecord rec = new offenseRecord();
+            rec.Show();
+            this.Hide();
+        }
+
+        private void addOffenseNav_Click_1(object sender, EventArgs e)
+        {
+            addOffense add = new addOffense();
+            add.Show();
+            this.Hide();
+        }
+
+        private void userManagementNav_Click_1(object sender, EventArgs e)
+        {
+            userManagementPage user = new userManagementPage();
+            user.Show();
+            this.Hide();
+        }
+
+        private void logOutNav_Click_1(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Are you sure you want to log out?", "Confirm", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+                loginPage form = new loginPage();
+                form.Show();
+                this.Hide();
+            }
+        }
+
+        private void homeDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void homePage_Shown(object sender, EventArgs e)
+        {
+            homeDataGridView.ClearSelection();
+            homeDataGridView.CurrentCell = null;
+        }
+
+        private void homePage_MouseClick(object sender, MouseEventArgs e)
+        {
         }
     }
 }
